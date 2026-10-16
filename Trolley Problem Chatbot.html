@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ETHICS AI | Moral Reasoning Lab</title>
+
+<style>
+:root {
+    --bg:#08090d;
+    --panel:#11131b;
+    --light:#171a24;
+    --red:#ff304b;
+    --white:#f5f6fa;
+    --muted:#969cad;
+    --border:#292d39;
+    --green:#50d890;
+    --yellow:#ffc857;
+}
+
+* {
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body {
+    min-height:100vh;
+    background:radial-gradient(ellipse at 50% 0%,#251019 0%,transparent 45%),var(--bg);
+    color:var(--white);
+    font-family:Arial,Helvetica,sans-serif;
+    line-height:1.6;
+}
+
+header {
+    padding:24px 7%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-bottom:1px solid var(--border);
+    gap:12px;
+}
+
+.logo {
+    font-size:21px;
+    font-weight:900;
+    letter-spacing:2px;
+}
+
+.logo span,.accent {
+    color:var(--red);
+}
+
+.header-tag {
+    color:var(--muted);
+    font-size:11px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+}
+
+main {
+    width:min(1050px,92%);
+    margin:50px auto;
+}
+
+.hero {
+    text-align:center;
+    margin-bottom:38px;
+}
+
+.eyebrow {
+    display:inline-block;
+    color:var(--red);
+    border:1px solid #632331;
+    background:#1b0d13;
+    border-radius:30px;
+    padding:6px 14px;
+    font-size:11px;
+    letter-spacing:2px;
+    margin-bottom:20px;
+}
+
+h1 {
+    font-size:clamp(35px,7vw,66px);
+    line-height:1.1;
+    letter-spacing:-2px;
+    margin-bottom:18px;
+}
+
+.hero p {
+    max-width:620px;
+    margin:auto;
+    color:var(--muted);
+    font-size:15px;
+}
+
+.panel {
+    background:rgba(17,19,27,.96);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:26px;
+    box-shadow:0 15px 45px #00000025;
+    min-width:0;
+}
+
+.panel-heading {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    margin-bottom:22px;
+}
+
+.panel-heading h2 {
+    font-size:17px;
+}
+
+.step {
+    color:var(--red);
+    font-size:11px;
+    letter-spacing:1px;
+}
+
+label {
+    display:block;
+    font-size:13px;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+textarea,input {
+    width:100%;
+    background:#090b11;
+    border:1px solid #343847;
+    border-radius:12px;
+    color:var(--white);
+    padding:14px;
+    font-family:inherit;
+    font-size:14px;
+    line-height:1.7;
+    outline:none;
+}
+
+textarea {
+    min-height:130px;
+    resize:vertical;
+}
+
+textarea:focus,input:focus {
+    border-color:var(--red);
+    box-shadow:0 0 0 3px #ff304b18;
+}
+
+textarea::placeholder,input::placeholder {
+    color:#676d7c;
+}
+
+.examples-title {
+    font-size:11px;
+    color:var(--muted);
+    margin:18px 0 10px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+}
+
+.examples {
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+}
+
+.example-btn {
+    border:1px solid var(--border);
+    background:var(--light);
+    color:#cbd0dc;
+    padding:8px 11px;
+    border-radius:8px;
+    font-size:12px;
+    cursor:pointer;
+}
+
+.example-btn:hover {
+    border-color:var(--red);
+    color:white;
+}
+
+.btn {
+    width:100%;
+    margin-top:16px;
+    padding:14px;
+    border:0;
+    border-radius:10px;
+    background:var(--red);
+    color:white;
+    font-size:13px;
+    font-weight:bold;
+    letter-spacing:1px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.btn:hover {
+    background:#e8213d;
+    transform:translateY(-1px);
+}
+
+.btn:disabled {
+    opacity:.6;
+    cursor:wait;
+    transform:none;
+}
+
+.secondary-btn {
+    background:var(--light);
+    border:1px solid var(--border);
+    color:var(--white);
+}
+
+.secondary-btn:hover {
+    background:#222633;
+}
+
+.layout {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:22px;
+    align-items:start;
+    margin-top:22px;
+}
+
+.result-empty {
+    min-height:240px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+}
+
+.result-icon {
+    width:70px;
+    height:70px;
+    border:1px solid #39313e;
+    border-radius:22px;
+    display:grid;
+    place-items:center;
+    color:var(--red);
+    font-size:32px;
+    background:#1a1119;
+    margin-bottom:20px;
+}
+
+.result-empty p {
+    color:var(--muted);
+    font-size:13px;
+    max-width:260px;
+}
+
+.hidden {
+    display:none!important;
+}
+
+.decision {
+    font-size:34px;
+    font-weight:900;
+    margin-bottom:5px;
+}
+
+.accept {color:var(--green)}
+.reject {color:var(--red)}
+.review {color:var(--yellow)}
+
+.muted {
+    color:var(--muted);
+    font-size:13px;
+}
+
+.score-row {
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    margin:20px 0 10px;
+    font-size:12px;
+}
+
+.score-track {
+    height:6px;
+    background:#292d39;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.score-fill {
+    height:100%;
+    width:0;
+    background:var(--red);
+    transition:width .4s;
+}
+
+.reason-box {
+    background:#090b11;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:15px;
+    margin-top:22px;
+}
+
+.reason-box h3,.criteria h3 {
+    font-size:12px;
+    margin-bottom:8px;
+}
+
+.reason-box p {
+    font-size:13px;
+    color:var(--muted);
+    white-space:pre-wrap;
+    overflow-wrap:anywhere;
+}
+
+.criterion {
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    padding:10px 0;
+    border-bottom:1px solid var(--border);
+    font-size:12px;
+}
+
+.criterion span:first-child {
+    color:var(--muted);
+}
+
+.criterion span:last-child {
+    text-align:right;
+}
+
+.note {
+    margin-top:20px;
+    padding:13px;
+    background:#17140d;
+    border:1px solid #42351c;
+    border-radius:10px;
+    color:#c9b783;
+    font-size:11px;
+}
+
+.chat-panel {
+    margin-top:22px;
+}
+
+.chat-messages {
+    min-height:230px;
+    max-height:440px;
+    overflow-y:auto;
+    background:#090b11;
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:15px;
+}
+
+.message {
+    margin-bottom:16px;
+    padding:12px 14px;
+    border-radius:10px;
+    white-space:pre-wrap;
+    overflow-wrap:anywhere;
+    font-size:13px;
+}
+
+.message:last-child {
+    margin-bottom:0;
+}
+
+.message.user {
+    background:#251019;
+    border:1px solid #632331;
+}
+
+.message.ai {
+    background:#151923;
+    border:1px solid #292d39;
+}
+
+.message.error {
+    background:#251019;
+    color:#ff8797;
+}
+
+.message strong {
+    display:block;
+    margin-bottom:5px;
+    color:var(--red);
+    font-size:11px;
+    letter-spacing:1px;
+}
+
+.chat-form {
+    margin-top:16px;
+}
+
+.chat-form textarea {
+    min-height:90px;
+}
+
+.chat-actions {
+    display:flex;
+    gap:10px;
+}
+
+.chat-actions .btn {
+    flex:1;
+}
+
+.info-section {
+    margin-top:26px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.info-card {
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:13px;
+    padding:19px;
+}
+
+.info-card .number {
+    color:var(--red);
+    font-size:12px;
+    margin-bottom:10px;
+}
+
+.info-card h3 {
+    font-size:14px;
+    margin-bottom:7px;
+}
+
+.info-card p {
+    font-size:12px;
+    color:var(--muted);
+}
+
+footer {
+    margin-top:60px;
+    border-top:1px solid var(--border);
+    padding:35px 20px;
+    text-align:center;
+    color:var(--muted);
+    font-size:12px;
+}
+
+.footer-brand {
+    color:var(--red);
+    font-size:14px;
+    font-weight:900;
+    letter-spacing:3px;
+    margin-bottom:8px;
+}
+
+.creator {
+    margin-top:8px;
+    color:white;
+    font-size:23px;
+    font-weight:800;
+}
+
+footer span {
+    color:var(--red);
+    font-style:italic;
+}
+
+@media(max-width:760px) {
+    header {
+        padding:20px 5%;
+    }
+
+    .header-tag {
+        font-size:9px;
+        letter-spacing:1px;
+        text-align:right;
+    }
+
+    main {
+        margin:35px auto;
+    }
+
+    .layout,.info-section {
+        grid-template-columns:1fr;
+    }
+
+    .panel {
+        padding:20px;
+    }
+
+    h1 {
+        letter-spacing:-1px;
+    }
+
+    .chat-actions {
+        flex-direction:column;
+        gap:0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">ETHICS <span>AI</span></div>
+    <div class="header-tag">Moral Reasoning Lab</div>
+</header>
+
+<main>
+
+<section class="hero">
+    <div class="eyebrow">ETHICS • LOGIC • DECISIONS</div>
+    <h1>Can AI make the <span class="accent">right</span> choice?</h1>
+    <p>
+        Explore ethical dilemmas, challenge your beliefs,
+        and discover how different principles influence decisions.
+    </p>
+</section>
+
+<!-- RULE-BASED ANALYZER -->
+<section class="panel">
+    <div class="panel-heading">
+        <h2>Rule-Based Analysis</h2>
+        <span class="step">MODE 01</span>
+    </div>
+
+    <label for="scenario">Describe your ethical scenario</label>
+    <textarea id="scenario"
+        placeholder="Describe a difficult decision, the people involved, and its possible consequences..."></textarea>
+
+    <div class="examples-title">Try a sample scenario</div>
+
+    <div class="examples">
+        <button class="example-btn" onclick="loadExample('trolley')">
+            Trolley Problem
+        </button>
+        <button class="example-btn" onclick="loadExample('cheating')">
+            Cheating to Win
+        </button>
+        <button class="example-btn" onclick="loadExample('privacy')">
+            Privacy vs Safety
+        </button>
+    </div>
+
+    <button class="btn" onclick="analyzeScenario()">
+        ANALYZE DECISION ↗
+    </button>
+</section>
+
+<div class="layout">
+
+    <!-- RULE-BASED RESULTS -->
+    <section class="panel">
+        <div class="panel-heading">
+            <h2>Analysis Results</h2>
+            <span class="step">RESULT</span>
+        </div>
+
+        <div id="emptyState" class="result-empty">
+            <div class="result-icon">⚖</div>
+            <h3>Awaiting your dilemma</h3>
+            <p>Submit a scenario to see the decision and ethical concerns.</p>
+        </div>
+
+        <div id="results" class="hidden">
+            <div class="muted">SUGGESTED OUTCOME</div>
+            <div id="decision" class="decision review">REVIEW</div>
+            <p id="decisionSubtitle" class="muted"></p>
+
+            <div class="score-row">
+                <span>Ethical risk indicator</span>
+                <strong id="scoreText">50/100</strong>
+            </div>
+
+            <div class="score-track">
+                <div id="scoreFill" class="score-fill"></div>
+            </div>
+
+            <div class="reason-box">
+                <h3>Reasoning</h3>
+                <p id="reasonText"></p>
+            </div>
+
+            <div class="criteria">
+                <h3 style="margin-top:20px">Ethical signals detected</h3>
+                <div class="criterion">
+                    <span>Potential harm</span>
+                    <span id="harmValue">Unknown</span>
+                </div>
+                <div class="criterion">
+                    <span>Consent and fairness</span>
+                    <span id="fairnessValue">Needs review</span>
+                </div>
+                <div class="criterion">
+                    <span>Decision confidence</span>
+                    <span id="confidenceValue">Low</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="note">
+            Educational simulation only. This result is not a definitive
+            moral judgment.
+        </div>
+    </section>
+
+    <!-- AI CHATBOT -->
+    <section class="panel">
+        <div class="panel-heading">
+            <h2>AI Chatbot</h2>
+            <span class="step">MODE 02</span>
+        </div>
+
+        <p class="muted" style="margin-bottom:16px">
+            Discuss the dilemma with an AI that explores different
+            ethical perspectives.
+        </p>
+
+        <div id="chatMessages" class="chat-messages" aria-live="polite">
+            <div class="message ai">
+                <strong>ETHICS AI</strong>
+                Hi! Tell me about an ethical dilemma.
+                We can explore the arguments, consequences,
+                and different points of view together.
+            </div>
+        </div>
+
+        <form id="chatForm" class="chat-form">
+            <label for="chatInput">Your message</label>
+            <textarea id="chatInput"
+                placeholder="Should I pull the lever to save five people?"
+                required></textarea>
+
+            <div class="chat-actions">
+                <button id="sendButton" class="btn" type="submit">
+                    SEND MESSAGE ↗
+                </button>
+                <button class="btn secondary-btn" type="button"
+                    onclick="clearChat()">
+                    NEW CHAT
+                </button>
+            </div>
+        </form>
+    </section>
+
+</div>
+
+<section class="info-section">
+    <div class="info-card">
+        <div class="number">01 / HARM</div>
+        <h3>Potential consequences</h3>
+        <p>Consider who may be affected and how serious the possible harm could be.</p>
+    </div>
+
+    <div class="info-card">
+        <div class="number">02 / FAIRNESS</div>
+        <h3>Rights and consent</h3>
+        <p>Consider whether the decision respects people's rights and treats them fairly.</p>
+    </div>
+
+    <div class="info-card">
+        <div class="number">03 / REASONING</div>
+        <h3>Explain the decision</h3>
+        <p>Explore different perspectives instead of accepting a label without reasoning.</p>
+    </div>
+</section>
+
+</main>
+
+<footer>
+    <div class="footer-brand">ETHICS AI</div>
+    An educational experiment in moral reasoning
+    <br><br>
+    DESIGNED &amp; DEVELOPED BY
+    <div class="creator">Hadil Ass</div>
+    <br>
+    <span>Sharing is caring.</span>
+</footer>
+
+<script>
+"use strict";
+
+/* =====================================================
+   CONFIGURATION
+   CHANGE YOUR API KEY AND MODEL IN THIS SECTION
+===================================================== */
+
+// CHANGE 1: Paste your Gemini API key between the quotes.
+const API_KEY = "PASTE_YOUR_API_KEY_HERE";
+
+// CHANGE 2: Change the model name here if needed.
+const MODEL = "gemini-2.5-flash-lite";
+
+const API_URL =
+    `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
+
+
+/* =====================================================
+   SAMPLE SCENARIOS
+===================================================== */
+
+const examples = {
+    trolley: `A runaway trolley is heading toward five people
+on the track. You can pull a lever to redirect it onto another
+track, where one person will be hit instead. Should you pull
+the lever to save five people at the cost of one life?`,
+
+    cheating: `A student discovers that cheating is the only
+way to win a competition. Nobody is likely to discover the
+cheating. Should the student cheat to secure victory, even
+though it is unfair to others?`,
+
+    privacy: `A company wants to secretly collect people's
+private messages to identify a possible threat. This could
+help prevent harm, but the people have not given their
+consent. Should the company collect the messages?`
+};
+
+function loadExample(type) {
+    document.getElementById("scenario").value = examples[type];
+    analyzeScenario();
+}
+
+
+/* =====================================================
+   RULE-BASED ETHICAL ANALYZER
+===================================================== */
+
+function analyzeScenario() {
+    const text = document.getElementById("scenario")
+        .value.trim();
+
+    if (!text) {
+        alert("Please describe an ethical dilemma first.");
+        return;
+    }
+
+    const lower = text.toLowerCase();
+
+    let risk = 50;
+    let decision = "REVIEW";
+    let subtitle = "More context is needed.";
+    let reasoning = "";
+    let harm = "Unclear";
+    let fairness = "Needs review";
+    let confidence = "Low";
+
+    const harmWords = [
+        "kill", "death", "die", "dead", "hurt", "harm",
+        "injure", "danger", "victim", "life", "lives",
+        "violence", "steal", "destroy"
+    ];
+
+    const unfairWords = [
+        "cheat", "cheating", "lie", "lying", "deceive",
+        "secretly", "without consent", "unfair", "exploit",
+        "privacy", "manipulate", "bribe", "fraud"
+    ];
+
+    const safetyWords = [
+        "prevent harm", "save lives", "protect",
+        "emergency", "rescue", "safety"
+    ];
+
+    const harmCount = harmWords.filter(
+        word => lower.includes(word)
+    ).length;
+
+    const unfairCount = unfairWords.filter(
+        word => lower.includes(word)
+    ).length;
+
+    const safetyCount = safetyWords.filter(
+        word => lower.includes(word)
+    ).length;
+
+    const trolleyDetected =
+        lower.includes("trolley") ||
+        lower.includes("lever") ||
+        lower.includes("runaway");
+
+    const cheatingDetected =
+        lower.includes("cheat") ||
+        lower.includes("cheating");
+
+    const privacyDetected =
+        lower.includes("privacy") ||
+        lower.includes("private messages") ||
+        lower.includes("without consent");
+
+    risk += Math.min(harmCount * 5, 25);
+    risk += Math.min(unfairCount * 9, 27);
+    risk -= Math.min(safetyCount * 5, 10);
+
+    if (trolleyDetected) {
+        decision = "REVIEW";
+        subtitle = "A difficult moral trade-off.";
+        reasoning =
+            "This scenario involves a conflict between reducing " +
+            "overall harm and respecting individual rights. Saving " +
+            "more people may seem beneficial, but the consequences " +
+            "and responsibility for causing harm must also be considered. " +
+            "There is no universally accepted answer.";
+        harm = "Potentially severe";
+        fairness = "Conflicting duties";
+        confidence = "High scenario match";
+        risk = Math.max(risk, 65);
+
+    } else if (cheatingDetected) {
+        decision = "REJECT";
+        subtitle = "Fairness and honesty are at risk.";
+        reasoning =
+            "Cheating can give one person an unfair advantage and " +
+            "undermine trust. Even if discovery seems unlikely, " +
+            "other participants may be disadvantaged. Consider " +
+            "honest alternatives.";
+        harm = "Unfair disadvantage";
+        fairness = "Fairness compromised";
+        confidence = "High scenario match";
+        risk = Math.max(risk, 75);
+
+    } else if (privacyDetected) {
+        decision = "REVIEW";
+        subtitle = "Safety must be balanced with privacy.";
+        reasoning =
+            "Preventing danger can be important, but collecting " +
+            "private messages without consent raises privacy and " +
+            "trust concerns. Consider whether the threat is credible, " +
+            "whether less intrusive options exist, and whether the " +
+            "action is necessary and proportionate.";
+        harm = "Depends on the threat";
+        fairness = "Consent concern";
+        confidence = "High scenario match";
+        risk = Math.max(risk, 65);
+
+    } else if (unfairCount > 0) {
+        decision = "REJECT";
+        subtitle = "A possible ethical violation was detected.";
+        reasoning =
+            "The scenario contains signals related to dishonesty, " +
+            "unfairness, privacy, or consent. Consider who could be " +
+            "affected and whether a more transparent alternative exists.";
+        harm = harmCount > 0 ? "Potential harm detected" : "Unclear";
+        fairness = "Potential concern";
+        confidence = "Moderate";
+        risk = Math.max(risk, 70);
+
+    } else if (harmCount > 0) {
+        decision = "REVIEW";
+        subtitle = "Possible harm needs further examination.";
+        reasoning =
+            "The scenario mentions possible harm or danger, but " +
+            "there is not enough information for a reliable conclusion. " +
+            "Consider the likelihood and severity of harm, who is " +
+            "affected, and whether safer alternatives exist.";
+        harm = "Potential harm detected";
+        fairness = "Needs more context";
+        confidence = "Moderate";
+        risk = Math.max(risk, 55);
+
+    } else {
+        decision = "REVIEW";
+        subtitle = "Insufficient ethical signals.";
+        reasoning =
+            "The system could not identify enough information. " +
+            "Add details about the people involved, their choices, " +
+            "possible consequences, consent, and fairness.";
+        harm = "Unclear";
+        fairness = "Needs more context";
+        confidence = "Low";
+        risk = 50;
+    }
+
+    risk = Math.max(0, Math.min(100, risk));
+
+    const decisionElement = document.getElementById("decision");
+    decisionElement.textContent = decision;
+    decisionElement.className =
+        "decision " + decision.toLowerCase();
+
+    document.getElementById("decisionSubtitle").textContent = subtitle;
+    document.getElementById("reasonText").textContent = reasoning;
+    document.getElementById("scoreText").textContent = risk + "/100";
+    document.getElementById("scoreFill").style.width = risk + "%";
+    document.getElementById("harmValue").textContent = harm;
+    document.getElementById("fairnessValue").textContent = fairness;
+    document.getElementById("confidenceValue").textContent = confidence;
+
+    document.getElementById("emptyState").classList.add("hidden");
+    document.getElementById("results").classList.remove("hidden");
+}
+
+
+/* =====================================================
+   GEMINI AI CHATBOT
+===================================================== */
+
+let chatHistory = [];
+let isSending = false;
+
+const chatForm = document.getElementById("chatForm");
+const chatInput = document.getElementById("chatInput");
+const chatMessages = document.getElementById("chatMessages");
+const sendButton = document.getElementById("sendButton");
+
+function addMessage(sender, text, type) {
+    const message = document.createElement("div");
+    message.className = "message " + type;
+
+    const label = document.createElement("strong");
+    label.textContent = sender;
+
+    const content = document.createElement("div");
+    content.textContent = text;
+
+    message.appendChild(label);
+    message.appendChild(content);
+    chatMessages.appendChild(message);
+
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function clearChat() {
+    if (isSending) return;
+
+    chatHistory = [];
+    chatMessages.replaceChildren();
+
+    addMessage(
+        "ETHICS AI",
+        "New conversation started. What ethical dilemma would you like to explore?",
+        "ai"
+    );
+}
+
+chatForm.addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    if (isSending) return;
+
+    const userText = chatInput.value.trim();
+
+    if (!userText) return;
+
+    if (!API_KEY || API_KEY === "PASTE_YOUR_API_KEY_HERE") {
+        addMessage(
+            "SETUP",
+            "Please add your Gemini API key in the API_KEY line near the top of the JavaScript code.",
+            "error"
+        );
+        return;
+    }
+
+    isSending = true;
+    sendButton.disabled = true;
+    sendButton.textContent = "THINKING...";
+    chatInput.disabled = true;
+
+    addMessage("YOU", userText, "user");
+    chatInput.value = "";
+
+    try {
+        const contents = [
+            ...chatHistory,
+            {
+                role: "user",
+                parts: [{ text: userText }]
+            }
+        ];
+
+        const response = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "x-goog-api-key": API_KEY
+            },
+            body: JSON.stringify({
+                system_instruction: {
+                    parts: [{
+                        text: `You are ETHICS AI, an educational chatbot
+specialized in moral reasoning and ethical dilemmas.
+
+Your goal is to help users think critically, not to impose
+one absolute moral answer.
+
+Discuss topics such as the trolley problem, honesty,
+fairness, privacy, consent, responsibility, safety,
+and the consequences of decisions.
+
+For each dilemma:
+1. Identify the main ethical conflict.
+2. Explain arguments for different choices.
+3. Discuss who may be helped or harmed.
+4. Mention relevant ethical principles.
+5. Give a balanced conclusion, explaining uncertainty
+   when there is no single universally accepted answer.
+
+Ask a follow-up question if important context is missing.
+Be respectful, clear, and concise. Use accessible English
+unless the user writes in another language.`
+                    }]
+                },
+                contents: contents,
+                generationConfig: {
+                    maxOutputTokens: 800
+                }
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            const apiMessage =
+                data?.error?.message || "Unknown API error";
+
+            throw new Error(
+                "Gemini API error (" + response.status + "): " +
+                apiMessage
+            );
+        }
+
+        const reply = data.candidates?.[0]?.content?.parts
+            ?.map(part => part.text || "")
+            .join("")
+            .trim();
+
+        if (!reply) {
+            const reason = data.promptFeedback?.blockReason;
+            throw new Error(
+                reason
+                    ? "The request was blocked: " + reason
+                    : "The model returned no text. Please try again."
+            );
+        }
+
+        chatHistory.push(
+            { role: "user", parts: [{ text: userText }] },
+            { role: "model", parts: [{ text: reply }] }
+        );
+
+        addMessage("ETHICS AI", reply, "ai");
+
+    } catch (error) {
+        addMessage(
+            "ERROR",
+            error.message +
+            "\n\nCheck your API key, model name, internet connection, and API quota.",
+            "error"
+        );
+    } finally {
+        isSending = false;
+        sendButton.disabled = false;
+        sendButton.textContent = "SEND MESSAGE ↗";
+        chatInput.disabled = false;
+        chatInput.focus();
+    }
+});
+</script>
+
+</body>
+</html>
